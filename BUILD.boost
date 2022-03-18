@@ -1868,6 +1868,8 @@ boost_library(
         ":lexical_cast",
         ":static_assert",
         ":type_traits",
+        # Needed by Clang on x86
+        "@libbacktrace//:libbacktrace",
     ],
 )
 

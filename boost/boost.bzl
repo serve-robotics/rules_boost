@@ -225,3 +225,31 @@ def boost_deps():
         strip_prefix = "boringssl-fc44652a42b396e1645d5e72aba053349992136a",
         url = "https://github.com/google/boringssl/archive/fc44652a42b396e1645d5e72aba053349992136a.tar.gz",
     )
+
+    maybe(
+        http_archive,
+        name = "libbacktrace",
+        build_file_content = '''
+genrule(
+    name = "libbacktrace_compile",
+    srcs = glob(["**"]),
+    outs = ["libbacktrace.a"],
+    cmd = "pwd && ./external/libbacktrace/configure && make && ./libtool --mode=install /usr/bin/install -c libbacktrace.la $(OUTS)",
+)
+
+cc_library(
+    name = "libbacktrace",
+    srcs = [":libbacktrace_compile"],
+    data = [":libbacktrace_compile"],
+    includes = ["."],
+    visibility=["//visibility:public"],
+    linkstatic = True,
+)
+''',
+        sha256 = "8c56a56827d273bb0110df613618fd8242592829ff94085272370a5a59f822de",
+        strip_prefix = "libbacktrace-master",
+        urls = [
+            #"https://github.com/ianlancetaylor/libbacktrace/archive/refs/heads/master.tar.gz",
+            "https://storage.googleapis.com/postmates-x-mirrors/libbacktrace-master.tar.gz",
+        ],
+    )
