@@ -240,7 +240,7 @@ genrule(
     name = "libbacktrace_install",
     srcs = [":libbacktrace_compile"],
     outs = ["libbacktrace.a"],
-    cmd = "./libtool --mode=install /usr/bin/install -c $(SRCS) $(OUTS)",
+    cmd = 'CWD="$$PWD"; ./libtool --mode=install /usr/bin/install -c $$CWD/$(SRCS) $$CWD/$(OUTS)',
 )
 
 cc_library(
