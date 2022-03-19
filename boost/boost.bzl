@@ -232,9 +232,9 @@ def boost_deps():
         build_file_content = '''
 genrule(
     name = "libbacktrace_compile",
-    srcs = glob(["**"]),
+    srcs = ["libbacktrace.la"],
     outs = ["libbacktrace.a"],
-    cmd = "pwd && ./external/libbacktrace/configure && make && ./libtool --mode=install /usr/bin/install -c libbacktrace.la $(OUTS)",
+    cmd = "./external/libbacktrace/configure && make && ./libtool --mode=install /usr/bin/install -c $(SRCS) $(OUTS)",
 )
 
 cc_library(
