@@ -233,12 +233,12 @@ def boost_deps():
 genrule(
     name = "libbacktrace_compile",
     outs = ["libbacktrace.la"],
-    cmd = "./external/libbacktrace/configure && make",
+    cmd = "./external/libbacktrace/configure && make && cp libbacktrace.la $@",
 )
 
 genrule(
     name = "libbacktrace_install",
-    srcs = ["libbacktrace.la"],
+    srcs = [":libbacktrace_compile"],
     outs = ["libbacktrace.a"],
     cmd = "./libtool --mode=install /usr/bin/install -c $(SRCS) $(OUTS)",
 )
