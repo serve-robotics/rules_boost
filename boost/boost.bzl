@@ -233,14 +233,16 @@ def boost_deps():
 genrule(
     name = "libbacktrace_compile",
     outs = ["libbacktrace.la"],
-    cmd = "./external/libbacktrace/configure && make && cp libbacktrace.la $@",
+    cmd = './external/libbacktrace/configure; make; cp libbacktrace.la $@',
 )
 
 genrule(
     name = "libbacktrace_install",
     srcs = [":libbacktrace_compile"],
     outs = ["libbacktrace.a"],
-    cmd = 'CWD="$$PWD"; ./libtool --mode=install /usr/bin/install -c $$CWD/$(SRCS) $$CWD/$(OUTS)',
+    # FIXME: Artifacts are generated in execroot but genrule looks for them in the package directory
+    #cmd = 'CWD="$$PWD"; ./libtool --mode=install /usr/bin/install -c $$CWD/$(SRCS) $$CWD/$(OUTS)',
+    cmd = 'cp ./.libs/libbacktrace.a $@',
 )
 
 cc_library(
