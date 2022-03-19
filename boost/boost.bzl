@@ -238,7 +238,6 @@ genrule(
 
 genrule(
     name = "libbacktrace_install",
-    deps = [":libbacktrace_compile"],
     srcs = ["libbacktrace.la"],
     outs = ["libbacktrace.a"],
     cmd = "./libtool --mode=install /usr/bin/install -c $(SRCS) $(OUTS)",
