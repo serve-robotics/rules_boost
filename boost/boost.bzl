@@ -233,7 +233,7 @@ def boost_deps():
 genrule(
     name = "libbacktrace_compile",
     outs = ["libbacktrace.la"],
-    cmd = './external/libbacktrace/configure --enable-host-shared; make; cp libbacktrace.la $@',
+    cmd = './external/libbacktrace/configure --with-pic --enable-host-shared; make; cp libbacktrace.la $@',
 )
 
 genrule(
