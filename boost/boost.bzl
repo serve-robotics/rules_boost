@@ -227,3 +227,38 @@ def boost_deps():
         strip_prefix = "boringssl-b3d98af9c80643b0a36d495693cc0e669181c0af",
         url = "https://github.com/google/boringssl/archive/b3d98af9c80643b0a36d495693cc0e669181c0af.tar.gz",
     )
+
+    maybe(
+        http_archive,
+        name = "libbacktrace",
+        build_file_content = '''
+genrule(
+    name = "libbacktrace_compile",
+    outs = ["libbacktrace.la"],
+    cmd = './external/libbacktrace/configure --with-pic --enable-host-shared; make; cp libbacktrace.la $@',
+)
+genrule(
+    name = "libbacktrace_install",
+    srcs = [":libbacktrace_compile"],
+    outs = ["libbacktrace.a"],
+    # FIXME: Artifacts are generated in execroot but genrule looks for them in the package directory
+    #cmd = 'CWD="$$PWD"; ./libtool --mode=install /usr/bin/install -c $$CWD/$(SRCS) $$CWD/$(OUTS)',
+    cmd = 'cp ./.libs/libbacktrace.a $@',
+)
+cc_library(
+    name = "libbacktrace",
+    srcs = [":libbacktrace_install"],
+    data = [":libbacktrace_install"],
+    includes = ["."],
+    visibility=["//visibility:public"],
+    linkstatic = True,
+)
+''',
+        sha256 = "8c56a56827d273bb0110df613618fd8242592829ff94085272370a5a59f822de",
+        strip_prefix = "libbacktrace-master",
+        urls = [
+            #"https://github.com/ianlancetaylor/libbacktrace/archive/refs/heads/master.tar.gz",
+            "https://storage.googleapis.com/postmates-x-mirrors/libbacktrace-master.tar.gz",
+        ],
+    )
+
